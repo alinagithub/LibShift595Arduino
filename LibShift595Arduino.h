@@ -316,7 +316,7 @@ public:
       ex: // before: [1,0,0,1,1,0,0,0][0,1,1,1,0,0,0,1]
           myShiftRegister.ShiftLeftRegister(true);
           // after:  [0,1,0,0,1,1,0,0][1,0,1,1,1,0,0,0]
-      */
+      */ 
    
    
    boolean NegateRegister(int reg_index);
