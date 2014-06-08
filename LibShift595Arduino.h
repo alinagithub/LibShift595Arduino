@@ -243,16 +243,81 @@ public:
       */
    
    boolean ShiftLeftRegister(boolean circular, int reg_index);
+      /*
+      Shift to the left values of a specific register:
+    
+         - circular:  set whether the shift is circular.
+         - reg_index: specify a register index.
+    
+      ex: // before: [1,0,0,1,1,0,0,0]
+          myShiftRegister.ShiftLeftRegister(true, 1);
+          // after:  [0,0,1,1,0,0,0,1]
+      
+      ex: // before: [1,0,0,1,1,0,0,0]
+          myShiftRegister.ShiftLeftRegister(true, 1);
+          // after:  [0,0,1,1,0,0,0,0]
+      */
    
    boolean ShiftLeftAllRegisters(boolean circular);
+      /*
+      Shift to the left values for all registers:
+    
+      - circular:  set whether the shift is circular.
+    
+      ex: // before: [1,0,0,1,1,0,0,0][1,1,0,0,0,0,0,0]
+          myShiftRegister.ShiftLeftRegister(true);
+          // after:  [0,0,1,1,0,0,0,1][1,0,0,0,0,0,0,1]
+      */
    
    boolean ShiftLeftEachRegisters(boolean circular);
+      /*
+      Shift to the left values for each registers:
+    
+         - circular:  set whether the shift is circular.
+    
+      ex: // before: [1,0,0,1,1,0,0,0][0,1,1,1,0,0,0,0]
+          myShiftRegister.ShiftLeftRegister(true);
+          // after:  [0,0,1,1,0,0,0,1][1,1,1,0,0,0,0,0]
+      */
    
    boolean ShiftRightRegister(boolean circular, int reg_index);
+      /*
+      Shift to the right values of a specific register:
+    
+         - circular:  set whether the shift is circular.
+         - reg_index: specify a register index.
+    
+      ex: // before: [1,0,0,1,1,0,0,1]
+          myShiftRegister.ShiftRightRegister(true, 1);
+          // after:  [1,1,0,0,1,1,0,0]
+    
+      ex: // before: [1,0,0,1,1,0,0,1]
+          myShiftRegister.ShiftLeftRegister(true, 1);
+          // after:  [0,1,0,0,1,1,0,0]
+      */
    
    boolean ShiftRightAllRegisters(boolean circular);
+      /*
+      Shift to the right values for all registers:
+    
+         - circular:  set whether the shift is circular.
+    
+      ex: // before: [1,0,0,1,1,0,0,0][1,1,0,0,0,0,0,1]
+          myShiftRegister.ShiftLeftRegister(true);
+          // after:  [1,1,0,0,1,1,0,0][0,1,1,0,0,0,0,0]
+      */
    
    boolean ShiftRightEachRegisters(boolean circular);
+      /*
+      Shift to the right values for each registers:
+    
+         - circular:  set whether the shift is circular.
+    
+      ex: // before: [1,0,0,1,1,0,0,0][0,1,1,1,0,0,0,1]
+          myShiftRegister.ShiftLeftRegister(true);
+          // after:  [0,1,0,0,1,1,0,0][1,0,1,1,1,0,0,0]
+      */
+   
    
    boolean NegateRegister(int reg_index);
       /*
