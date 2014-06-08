@@ -231,7 +231,7 @@ public:
       ex: myShiftRegister.OffSingleOnlyAllRegisters(12);
       */
    
-   boolean OffSingleEachRegisters(int position);
+   boolean OffSingleOnlyEachRegisters(int position);
       /*
       Turn Off ('0') value at a specific position for each register,
       and Turn On all other values:
