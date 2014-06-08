@@ -1,61 +1,54 @@
 #include <LibShift595Arduino.h>
 
-Shift595Arduino ShiftReg(2, 3, 4, 2);
+//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// FILE: testlibshift595arduino.ino
+// VERSION: 0.1.00
+// PURPOSE: Test for the LibShift595Arduino
+//          using 2x cascaded 595 shift registers.
+// CREATED BY: Arnaud D. LINA
+// DATE: June 2014
+//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+
+#define NumberOfRegisters 2
+#define LatchPin          4
+#define ClockPin          3
+#define DataPin           2
+
+/* Instantiate the shift register object */
+Shift595Arduino MyShiftReg(DataPin, ClockPin, LatchPin, NumberOfRegisters);
 
 void setup() 
   {
-  //set pins to output because they are addressed in the main loop
-  pinMode(4, OUTPUT);
-  Serial.begin(9600);
+  MyShiftReg.Setup();                  /* Init the shift register object                              */
+  MyShiftReg.verbose = true;           /* Optional: enable verbose output                             */
+  Serial.begin(9600);                  /* Optional: start Serial to get the verbose output            */ 
   }
   
 void loop()
  { 
-   // Set all Leds on
-   ShiftReg.OnAllRegisters();
-   ShiftReg.Update();
-   delay(1000);
+   MyShiftReg.auto_update    =  true;  /* Enable auto update of the register state after each action  */ 
+   MyShiftReg.update_delay   =  1000;  /* Set automatic update delay of 1 second for the auto update  */
    
-   // Set all Leds off
-   ShiftReg.OffAllRegisters();
-   ShiftReg.Update();
-   delay(1000);
+   MyShiftReg.OnAllRegisters();        /* Turn ON all LEDs                                            */
+   MyShiftReg.Blink(5, 100);           /* Blink LEDs 5 times with 100ms period                        */
+   MyShiftReg.OffAllRegisters();       /* Turn OFF all LEDs                                           */
    
-   // Scan all Leds
-   for(int ii=0; ii<16; ii++)
-     {
-     ShiftReg.OnSingleOnlyAllRegisters(ii);
-     ShiftReg.Update();
-     delay(200);
-     }
-     
-   // Set all Leds off
-   ShiftReg.OffAllRegisters();
-   ShiftReg.Update();
-   delay(1000);
+   MyShiftReg.auto_update    = false;  /* Disable auto update of the register state after each action */ 
+   MyShiftReg.OnSingleAllRegisters(0); /* Set ON LED 0                                                */
+   MyShiftReg.OnSingleAllRegisters(1); /* Set ON LED 1                                                */
+   MyShiftReg.OnSingleAllRegisters(2); /* Set ON LED 2                                                */
+   MyShiftReg.Update();                /* Force register state update to turn ON LEDs 0,1, and 2      */                                
    
-   // Set led 1 and 2 on
-   ShiftReg.OnSingleEachRegisters(1);
-   ShiftReg.OnSingleEachRegisters(2);
-   ShiftReg.Update();
-   delay(1000);
+   MyShiftReg.auto_update    = true;   /* Enable auto update of the register state after each action  */
+   MyShiftReg.update_delay   =  100;   /* Set automatic update delay of 100 msec for the auto update  */
    
-   // Translate the pattern on the left
-   for(int ii=0; ii<33; ii++)
-   {
-     ShiftReg.ShiftLeftRegister(true, 0);
-     ShiftReg.ShiftLeftRegister(true, 1);
-     ShiftReg.Update();
-     delay(100);
-   }
-   delay(100);
+   for(int ii=0; ii<32; ii++)                  /* Circular shift the registers to the left.           */
+      MyShiftReg.ShiftLeftAllRegisters(true);  /* Now LEDs 1,2,3 are on, then 2,3,4...                */
+                                                 
+   MyShiftReg.OffRegister(0);          /* Turn OFF the first 8 LEDs                                   */
+   MyShiftReg.OnRegister(1);           /* Turn ON the second 8 LEDs                                   */
    
-   // Translate the pattern on the right
-   for(int ii=0; ii<33; ii++)
-   {
-     ShiftReg.ShiftRightRegister(true, 0);
-     ShiftReg.ShiftRightRegister(true, 1);
-     ShiftReg.Update();
-     delay(100);
-   }
+   MyShiftReg.update_delay  =  250;    /* Set automatic update delay of 250 msec for the auto update  */
+   for(int ii=0; ii<10; ii++)          /* Negate the registers states.                                */
+      MyShiftReg.NegateAllRegisters(); /* Now first 8 LEDs ON and second 8 LEDs OFF, then alternate...*/
  }

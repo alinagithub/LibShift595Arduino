@@ -14,10 +14,14 @@
 //
 
 #define DEFAULT_VERBOSE       false
+#define DEFAULT_AUTO_UPDATE    true
+#define DEFAULT_UPDATE_DELAY      0
 
 Shift595Arduino::Shift595Arduino(int datapin, int clockpin, int latchpin, int nbregisters)
    {
    verbose                    = DEFAULT_VERBOSE;
+   update_delay               = DEFAULT_UPDATE_DELAY;
+   auto_update                = DEFAULT_AUTO_UPDATE;
    nb_registers               = nbregisters;
    data_pin                   = datapin;
    clock_pin                  = clockpin;
@@ -27,136 +31,202 @@ Shift595Arduino::Shift595Arduino(int datapin, int clockpin, int latchpin, int nb
    registerData = new byte[nb_registers];
    }
 
+boolean Shift595Arduino::Setup()
+{
+   pinMode(latch_pin, OUTPUT);
+   return true;
+}
+
 boolean Shift595Arduino::OffRegister(int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffRegister(reg_index);
+   boolean status = funcOffRegister(reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffAllRegisters()
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffAllRegisters();
+   boolean status = funcOffAllRegisters();
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnRegister(int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnRegister(reg_index);
+   boolean status = funcOnRegister(reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnAllRegisters()
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnAllRegisters();
+   boolean status = funcOnAllRegisters();
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnSingleRegister(int position, int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnSingleRegister(position, reg_index);
+   boolean status = funcOnSingleRegister(position, reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnSingleOnlyRegister(int position, int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnSingleOnlyRegister(position, reg_index);
+   boolean status = funcOnSingleOnlyRegister(position, reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnSingleAllRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnSingleAllRegisters(position);
+   boolean status = funcOnSingleAllRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnSingleOnlyAllRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnSingleOnlyAllRegisters(position);
+   boolean status = funcOnSingleOnlyAllRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnSingleEachRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnSingleEachRegisters(position);
+   boolean status = funcOnSingleEachRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OnSingleOnlyEachRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOnSingleOnlyEachRegisters(position);
+   boolean status = funcOnSingleOnlyEachRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffSingleRegister(int position, int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffSingleRegister(position, reg_index);
+   boolean status = funcOffSingleRegister(position, reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffSingleOnlyRegister(int position, int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffSingleOnlyRegister(position, reg_index);
+   boolean status = funcOffSingleOnlyRegister(position, reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffSingleAllRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffSingleAllRegisters(position);
+   boolean status = funcOffSingleAllRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffSingleOnlyAllRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffSingleOnlyAllRegisters(position);
+   boolean status = funcOffSingleOnlyAllRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffSingleEachRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffSingleEachRegisters(position);
+   boolean status = funcOffSingleEachRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::OffSingleOnlyEachRegisters(int position)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcOffSingleOnlyEachRegisters(position);
+   boolean status = funcOffSingleOnlyEachRegisters(position);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::ShiftLeftRegister(boolean circular, int reg_index)
-   {
+{
    FuncObj obj(&funclevel, &verbose);
-   return funcShiftLeftRegister(circular, reg_index);
-   }
+   boolean status = funcShiftLeftRegister(circular, reg_index);
+   funcAutoUpdate();
+   return status;
+}
 
 boolean Shift595Arduino::ShiftLeftAllRegisters(boolean circular)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcShiftLeftAllRegisters(circular);
+   boolean status = funcShiftLeftAllRegisters(circular);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::ShiftLeftEachRegisters(boolean circular)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcShiftLeftEachRegisters(circular);
+   boolean status = funcShiftLeftEachRegisters(circular);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::ShiftRightRegister(boolean circular, int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcShiftRightRegister(circular, reg_index);
+   boolean status = funcShiftRightRegister(circular, reg_index);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::ShiftRightAllRegisters(boolean circular)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcShiftRightAllRegisters(circular);
+   boolean status = funcShiftRightAllRegisters(circular);
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::ShiftRightEachRegisters(boolean circular)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcShiftRightEachRegisters(circular);
+   boolean status = funcShiftRightEachRegisters(circular);
+   funcAutoUpdate();
+   return status;
+}
+
+boolean Shift595Arduino::NegateRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcNegateRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+
+boolean Shift595Arduino::NegateAllRegisters()
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcNegateAllRegisters();
+   funcAutoUpdate();
+   return status;
 }
 
 boolean Shift595Arduino::Update()
@@ -169,6 +239,37 @@ boolean Shift595Arduino::Blink(int iter, int delay_val)
 {
    FuncObj obj(&funclevel, &verbose);
    return funcBlink(iter, delay_val);
+}
+
+boolean Shift595Arduino::TestSequence()
+{
+   auto_update    =  true;
+   update_delay   =  1000;
+   
+   OnAllRegisters();
+   Blink(5, 100);
+   OffAllRegisters();
+   
+   auto_update    = false;
+   OnSingleAllRegisters(0);
+   OnSingleAllRegisters(1);
+   OnSingleAllRegisters(2);
+   Update();
+   
+   auto_update    = true;
+   update_delay   =  100;
+   for(int ii=0; ii<2*8*nb_registers; ii++)
+      ShiftLeftAllRegisters(true);
+   
+   for(int ii=0; ii<(nb_registers-1); ii++)
+      {
+      OffRegister(ii);
+      OnRegister(ii+1);
+      }
+   
+   update_delay  =  250;
+   for(int ii=0; ii<10; ii++)
+      NegateAllRegisters();
 }
 
 /////////////////////////////////////////////////////
@@ -223,6 +324,7 @@ boolean Shift595Arduino::funcOnSingleRegister(int position, int reg_index)
    if(!ValidRegisterPosition(position)) {return false;};
    
    registerData[reg_index] |= 1<<position;
+   
    return true;
 }
 
@@ -361,7 +463,6 @@ boolean Shift595Arduino::funcShiftLeftRegister(boolean circular, int reg_index)
    Dump("ShiftLeftRegister");
    
    bool bitzero_on = registerData[reg_index] & 0x80;
-   Serial.print(bitzero_on);
    
    registerData[reg_index]=registerData[reg_index]<<1;
    
@@ -378,8 +479,25 @@ boolean Shift595Arduino::funcShiftLeftAllRegisters(boolean circular)
 {
    Dump("ShiftLeftAllRegisters");
    
-   // To implement...
+   bool* bitzero_on = new bool[nb_registers];
    
+   for(int ii=0; ii<nb_registers; ii++)
+      bitzero_on[ii] = registerData[ii] & 0x80;
+   
+   for(int ii=0; ii<nb_registers; ii++)
+      registerData[ii]=registerData[ii]<<1;
+   
+   for(int ii=0; ii<(nb_registers-1); ii++)
+      if(bitzero_on[ii])
+         registerData[ii+1] |=0x1;
+   
+   if(circular)
+      if(bitzero_on[nb_registers-1])
+         registerData[0] |=0x1;
+      else
+         registerData[0] &=0xFE;
+  
+   delete[] bitzero_on;
    return true;
 }
 
@@ -415,8 +533,25 @@ boolean Shift595Arduino::funcShiftRightAllRegisters(boolean circular)
 {
    Dump("ShiftRightAllRegisters");
    
-   // To implement...
+   bool* bitzero_on = new bool[nb_registers];
    
+   for(int ii=0; ii<nb_registers; ii++)
+      bitzero_on[ii] = registerData[ii] & 0x01;
+   
+   for(int ii=0; ii<nb_registers; ii++)
+      registerData[ii]=registerData[ii]>>1;
+   
+   for(int ii=0; ii<(nb_registers-1); ii++)
+      if(bitzero_on[nb_registers-ii-1])
+         registerData[nb_registers-ii-2] |=0x7F;
+   
+   if(circular)
+      if(bitzero_on[0])
+         registerData[nb_registers-1] |=0x80;
+      else
+         registerData[nb_registers-1] &=0x7F;
+   
+   delete[] bitzero_on;
    return true;
 }
 
@@ -428,6 +563,33 @@ boolean Shift595Arduino::funcShiftRightEachRegisters(boolean circular)
       funcShiftRightRegister(circular, ii);
       
       return true;
+}
+
+boolean Shift595Arduino::funcNegateRegister(int reg_index)
+{
+   Dump("NegateRegister");
+   
+   registerData[reg_index] = ~registerData[reg_index];
+   
+   return true;
+}
+
+boolean Shift595Arduino::funcNegateAllRegisters()
+{
+   Dump("NegateAllRegisters");
+   
+   for(int ii=0; ii<nb_registers; ii++)
+      registerData[ii] = ~registerData[ii];
+   
+   return true;
+}
+
+boolean Shift595Arduino::funcAutoUpdate()
+{
+   if(auto_update)
+      return funcUpdate();
+   
+   return false;
 }
 
 boolean Shift595Arduino::funcUpdate()
@@ -442,6 +604,8 @@ boolean Shift595Arduino::funcUpdate()
    //return the latch pin high to signal chip that it
    //no longer needs to listen for information
    digitalWrite(latch_pin, 1);
+   delay(update_delay);
+   return true;
 }
 
 boolean Shift595Arduino::funcBlink(int iter, int delay_val)
@@ -459,7 +623,15 @@ boolean Shift595Arduino::funcBlink(int iter, int delay_val)
       //no longer needs to listen for information
       digitalWrite(latch_pin, 1);
       delay(delay_val);
-      funcUpdate();
+      
+      //ground latchPin and hold low for as long as you are transmitting
+      digitalWrite(latch_pin, 0);
+      //move 'em out
+      for(int ii=0; ii<nb_registers; ii++)
+         ShiftOut(registerData[nb_registers-ii-1]);
+      //return the latch pin high to signal chip that it
+      //no longer needs to listen for information
+      digitalWrite(latch_pin, 1);
       delay(delay_val);
       }
    
@@ -472,7 +644,7 @@ boolean Shift595Arduino::funcBlink(int iter, int delay_val)
 //
 void Shift595Arduino::Dump(char* text)
 {
-   if(verbose)
+   if(Serial && verbose)
       {
       Serial.print(text);
       delay(20);

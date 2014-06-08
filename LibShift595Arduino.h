@@ -24,6 +24,8 @@ public:
    Shift595Arduino(int datapin, int clockpin, int latchpin, int nbregisters=1);
    ~Shift595Arduino() {delete[] registerData;};
    
+   boolean Setup();
+   
    boolean OffRegister(int reg_index);
    boolean OffAllRegisters();
    boolean OnRegister(int reg_index);
@@ -51,14 +53,16 @@ public:
    boolean ShiftRightAllRegisters(boolean circular);
    boolean ShiftRightEachRegisters(boolean circular);
    
+   boolean NegateRegister(int reg_index);
+   boolean NegateAllRegisters();
+   
    boolean Update();
    boolean Blink(int iter, int delay_val);
+   boolean TestSequence();
    
    boolean verbose;
-   int     nb_registers;
-   int     data_pin;
-   int     clock_pin;
-   int     latch_pin;
+   boolean auto_update;
+   int     update_delay;
    
 private:
    
@@ -91,7 +95,11 @@ private:
    boolean funcShiftRightEachRegisters(boolean circular);
    boolean funcShiftRightAcross(boolean circular);
    
+   boolean funcNegateRegister(int reg_index);
+   boolean funcNegateAllRegisters();
+   
    boolean funcUpdate();
+   boolean funcAutoUpdate();
    boolean funcBlink(int iter, int delay_val);
 
 private:
@@ -102,8 +110,12 @@ private:
    boolean ValidAllRegistersPosition(int index);
    
 private:
-   int   funclevel;
-   byte* registerData;
+   int     funclevel;
+   int     nb_registers;
+   int     data_pin;
+   int     clock_pin;
+   int     latch_pin;
+   byte*   registerData;
 };
 
 
