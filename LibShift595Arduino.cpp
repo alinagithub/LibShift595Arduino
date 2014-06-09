@@ -17,6 +17,9 @@
 #define DEFAULT_AUTO_UPDATE    true
 #define DEFAULT_UPDATE_DELAY      0
 
+namespace libshift595arduino
+{
+
 Shift595Arduino::Shift595Arduino(int datapin, int clockpin, int latchpin, int nbregisters)
    {
    verbose                    = DEFAULT_VERBOSE;
@@ -722,6 +725,7 @@ void Shift595Arduino::ShiftOut(byte DataOut)
    digitalWrite(clock_pin, 0);
 }
 
+} // end namespace
 
 //
 // END OF FILE

@@ -6,8 +6,8 @@
 // DATE: June 2014
 //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 
-#ifndef libcomarduino_h
-#define libcomarduino_h
+#ifndef libshift595arduino_h
+#define libshift595arduino_h
 
 #if ARDUINO >= 100
  #include "Arduino.h"
@@ -17,6 +17,10 @@
 
 #define LIBCOMARDUINO_LIB_VERSION "0.1.00"
 
+
+
+namespace libshift595arduino
+{
 
 class Shift595Arduino
 {
@@ -316,7 +320,7 @@ public:
       ex: // before: [1,0,0,1,1,0,0,0][0,1,1,1,0,0,0,1]
           myShiftRegister.ShiftLeftRegister(true);
           // after:  [0,1,0,0,1,1,0,0][1,0,1,1,1,0,0,0]
-      */ 
+      */
    
    
    boolean NegateRegister(int reg_index);
@@ -502,6 +506,8 @@ public:
    int*     funclevelptr;
    boolean* funcverboseptr;
 };
+   
+} // end namespace
 #endif
 
 //

@@ -1,4 +1,5 @@
 #include <LibShift595Arduino.h>
+using namespace libshift595arduino;
 
 //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 // FILE: testlibshift595arduino.ino
