@@ -47,7 +47,7 @@ boolean Shift595Arduino::OffRegister(int reg_index)
    funcAutoUpdate();
    return status;
 }
-
+   
 boolean Shift595Arduino::OffAllRegisters()
 {
    FuncObj obj(&funclevel, &verbose);
@@ -64,6 +64,54 @@ boolean Shift595Arduino::OnRegister(int reg_index)
    return status;
 }
 
+boolean Shift595Arduino::OnUpperHalfRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcOnUpperHalfRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+   
+boolean Shift595Arduino::OnLowerHalfRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcOnLowerHalfRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+   
+boolean Shift595Arduino::OnUpperHalfOnlyRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcOnUpperHalfOnlyRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+   
+boolean Shift595Arduino::OnLowerHalfOnlyRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcOnLowerHalfOnlyRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+   
+boolean Shift595Arduino::OffUpperHalfRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcOffUpperHalfRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+   
+boolean Shift595Arduino::OffLowerHalfRegister(int reg_index)
+{
+   FuncObj obj(&funclevel, &verbose);
+   boolean status = funcOffLowerHalfRegister(reg_index);
+   funcAutoUpdate();
+   return status;
+}
+   
 boolean Shift595Arduino::OnAllRegisters()
 {
    FuncObj obj(&funclevel, &verbose);
@@ -232,16 +280,28 @@ boolean Shift595Arduino::NegateAllRegisters()
    return status;
 }
 
-boolean Shift595Arduino::Update()
+boolean Shift595Arduino::UpdateRegister(int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcUpdate();
+   return funcUpdateRegister(reg_index);
 }
+   
+boolean Shift595Arduino::UpdateAllRegisters()
+   {
+   FuncObj obj(&funclevel, &verbose);
+   return funcUpdateAllRegisters();
+   }
 
-boolean Shift595Arduino::Blink(int iter, int delay_val)
+boolean Shift595Arduino::BlinkRegister(int iter, int delay_val, int reg_index)
 {
    FuncObj obj(&funclevel, &verbose);
-   return funcBlink(iter, delay_val);
+   return funcBlinkRegister(iter, delay_val, reg_index);
+}
+   
+boolean Shift595Arduino::BlinkAllRegisters(int iter, int delay_val)
+{
+   FuncObj obj(&funclevel, &verbose);
+   return funcBlinkAllRegisters(iter, delay_val);
 }
 
 boolean Shift595Arduino::TestSequence()
@@ -250,14 +310,14 @@ boolean Shift595Arduino::TestSequence()
    update_delay   =  1000;
    
    OnAllRegisters();
-   Blink(5, 100);
+   BlinkAllRegisters(5, 100);
    OffAllRegisters();
    
    auto_update    = false;
    OnSingleAllRegisters(0);
    OnSingleAllRegisters(1);
    OnSingleAllRegisters(2);
-   Update();
+   UpdateAllRegisters();
    
    auto_update    = true;
    update_delay   =  100;
@@ -286,6 +346,66 @@ boolean Shift595Arduino::funcOffRegister(int reg_index)
    if(!ValidRegister(reg_index)) {return false;};
    
    registerData[reg_index] = 0x0;
+   
+   return true;
+}
+
+boolean Shift595Arduino::funcOnUpperHalfOnlyRegister(int reg_index)
+{
+   Dump("OffUpperHalfOnlyRegister");
+   if(!ValidRegister(reg_index)) {return false;};
+   
+   registerData[reg_index] = 0xF0;
+   
+   return true;
+}
+   
+boolean Shift595Arduino::funcOnLowerHalfOnlyRegister(int reg_index)
+{
+   Dump("OffLowerHalfOnlyRegister");
+   if(!ValidRegister(reg_index)) {return false;};
+   
+   registerData[reg_index] = 0x0F;
+   
+   return true;
+}
+   
+boolean Shift595Arduino::funcOffUpperHalfRegister(int reg_index)
+{
+   Dump("OffUpperHalfOnlyRegister");
+   if(!ValidRegister(reg_index)) {return false;};
+   
+   registerData[reg_index] &= 0x0F;
+   
+   return true;
+}
+   
+boolean Shift595Arduino::funcOffLowerHalfRegister(int reg_index)
+{
+   Dump("OffLowerHalfOnlyRegister");
+   if(!ValidRegister(reg_index)) {return false;};
+   
+   registerData[reg_index] &= 0xF0;
+   
+   return true;
+}
+   
+boolean Shift595Arduino::funcOnUpperHalfRegister(int reg_index)
+{
+   Dump("OffUpperHalfRegister");
+   if(!ValidRegister(reg_index)) {return false;};
+   
+   registerData[reg_index] |= 0xF0;
+   
+   return true;
+}
+   
+boolean Shift595Arduino::funcOnLowerHalfRegister(int reg_index)
+{
+   Dump("OffLowerHalfRegister");
+   if(!ValidRegister(reg_index)) {return false;};
+   
+   registerData[reg_index] |= 0x0F;
    
    return true;
 }
@@ -590,14 +710,29 @@ boolean Shift595Arduino::funcNegateAllRegisters()
 boolean Shift595Arduino::funcAutoUpdate()
 {
    if(auto_update)
-      return funcUpdate();
+      return funcUpdateAllRegisters();
    
    return false;
 }
 
-boolean Shift595Arduino::funcUpdate()
+boolean Shift595Arduino::funcUpdateRegister(int reg_index)
 {
-   Dump("Update");
+   Dump("UpdateRegister");
+   
+   //ground latchPin and hold low for as long as you are transmitting
+   digitalWrite(latch_pin, 0);
+   //move 'em out
+   ShiftOut(registerData[nb_registers-reg_index-1]);
+   //return the latch pin high to signal chip that it
+   //no longer needs to listen for information
+   digitalWrite(latch_pin, 1);
+   delay(update_delay);
+   return true;
+}
+   
+boolean Shift595Arduino::funcUpdateAllRegisters()
+{
+   Dump("UpdateAllRegisters");
    
    //ground latchPin and hold low for as long as you are transmitting
    digitalWrite(latch_pin, 0);
@@ -611,7 +746,40 @@ boolean Shift595Arduino::funcUpdate()
    return true;
 }
 
-boolean Shift595Arduino::funcBlink(int iter, int delay_val)
+boolean Shift595Arduino::funcBlinkRegister(int iter, int delay_val, int reg_index)
+{
+   Dump("BlinkRegister");
+   
+   for(int jj=0; jj<iter; jj++)
+      {
+      //ground latchPin and hold low for as long as you are transmitting
+      digitalWrite(latch_pin, 0);
+      //move 'em out
+      for(int ii=0; ii<nb_registers; ii++)
+         if((nb_registers-ii-1)==reg_index)
+            ShiftOut(0x0);
+         else
+            ShiftOut(registerData[nb_registers-ii-1]);
+      //return the latch pin high to signal chip that it
+      //no longer needs to listen for information
+      digitalWrite(latch_pin, 1);
+      delay(delay_val);
+      
+      //ground latchPin and hold low for as long as you are transmitting
+      digitalWrite(latch_pin, 0);
+      //move 'em out
+      for(int ii=0; ii<nb_registers; ii++)
+         ShiftOut(registerData[nb_registers-ii-1]);
+      //return the latch pin high to signal chip that it
+      //no longer needs to listen for information
+      digitalWrite(latch_pin, 1);
+      delay(delay_val);
+      }
+   
+   return true;
+}
+
+boolean Shift595Arduino::funcBlinkAllRegisters(int iter, int delay_val)
 {
    Dump("Blink");
    
@@ -641,6 +809,7 @@ boolean Shift595Arduino::funcBlink(int iter, int delay_val)
    return true;
 }
 
+   
 /////////////////////////////////////////////////////
 //
 // PRIVATE UTIL

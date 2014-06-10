@@ -102,13 +102,73 @@ public:
    
    boolean OnRegister(int reg_index);
       /*
-      turn On ('1') values of a specifc register:
+      Turn On ('1') values of a specifc register:
        
          - reg_index: specify a register index.
     
       ex: myShiftRegister.OnRegister(1);
       */
    
+   boolean OnUpperHalfRegister(int reg_index);
+      /*
+      Turn On ('1') values of the upper half of
+      a specifc register:
+    
+         - reg_index: specify a register index.
+    
+      ex: myShiftRegister.OnUpperHalfRegister(1);
+      */
+   
+   boolean OnLowerHalfRegister(int reg_index);
+      /*
+      Turn On ('1') values of the lower half of
+      a specifc register:
+    
+        - reg_index: specify a register index.
+    
+      ex: myShiftRegister.OnLowerHalfRegister(1);
+      */
+
+   boolean OffUpperHalfRegister(int reg_index);
+      /*
+      Turn Off ('0') values of the upper half of
+      a specifc register:
+    
+         - reg_index: specify a register index.
+    
+      ex: myShiftRegister.OffUpperHalfRegister(1);
+      */
+   
+   boolean OffLowerHalfRegister(int reg_index);
+      /*
+      Turn Off ('0') values of the lower half of
+      a specifc register:
+    
+         - reg_index: specify a register index.
+    
+      ex: myShiftRegister.OffLowerHalfRegister(1);
+      */
+   
+   boolean OnUpperHalfOnlyRegister(int reg_index);
+      /*
+      Turn On ('1') values of the upper half of
+      a specifc register, turn Off other values:
+    
+         - reg_index: specify a register index.
+    
+      ex: myShiftRegister.OnUpperHalfOnlyRegister(1);
+      */
+   
+   boolean OnLowerHalfOnlyRegister(int reg_index);
+      /*
+      Turn On ('1') values of the lower half of
+      a specifc register, turn Off other values:
+    
+         - reg_index: specify a register index.
+    
+      ex: myShiftRegister.OnLowerHalfOnlyRegister(1);
+      */
+
    boolean OnAllRegisters();
       /*
       Turn On ('1') values of all registers.
@@ -340,15 +400,35 @@ public:
       ex: myShiftRegister.NegateAllRegisters();
       */
    
-   boolean Update();
+   boolean UpdateAllRegisters();
       /*
-      Update register state. Register output pins are updated
+      Update registers' state. Registers' output pins are updated
       to their current values.
        
-      ex: myShiftRegister.Update();
+      ex: myShiftRegister.UpdateAllRegisters();
       */
    
-   boolean Blink(int iter, int delay_val);
+   boolean UpdateRegister(int reg_index);
+      /*
+      Update register state of a sprcific register. 
+      Register output pins are updated to their 
+      current values.
+    
+      ex: myShiftRegister.UpdateRegister(1);
+      */
+   
+   boolean BlinkRegister(int iter, int delay_val, int reg_index);
+      /*
+      Update Off then update to their current values the
+      output pins of a specific register.
+    
+         - iter:  number of blinks.
+         - delay_val: blink delay in milliseconds.
+    
+      ex: myShiftRegister.BlinkRegister(5, 100, 1);
+      */
+   
+   boolean BlinkAllRegisters(int iter, int delay_val);
       /*
       Update Off then update to their current values the
       output pins of the registers.
@@ -356,7 +436,7 @@ public:
          - iter:  number of blinks.
          - delay_val: blink delay in milliseconds.
     
-      ex: myShiftRegister.Blink(5, 100);
+      ex: myShiftRegister.BlinkAllRegisters(5, 100);
       */
    
    boolean TestSequence();
@@ -421,6 +501,12 @@ private:
    boolean funcOffAllRegisters();
    boolean funcOnRegister(int reg_index);
    boolean funcOnAllRegisters();
+   boolean funcOnUpperHalfRegister(int reg_index);
+   boolean funcOnLowerHalfRegister(int reg_index);
+   boolean funcOffUpperHalfRegister(int reg_index);
+   boolean funcOffLowerHalfRegister(int reg_index);
+   boolean funcOnUpperHalfOnlyRegister(int reg_index);
+   boolean funcOnLowerHalfOnlyRegister(int reg_index);
    
    boolean funcOnSingleRegister(int position, int reg_index);
    boolean funcOnSingleAllRegisters(int position);
@@ -449,9 +535,11 @@ private:
    boolean funcNegateRegister(int reg_index);
    boolean funcNegateAllRegisters();
    
-   boolean funcUpdate();
+   boolean funcUpdateRegister(int reg_index);
+   boolean funcUpdateAllRegisters();
    boolean funcAutoUpdate();
-   boolean funcBlink(int iter, int delay_val);
+   boolean funcBlinkRegister(int iter, int delay_val, int reg_index);
+   boolean funcBlinkAllRegisters(int iter, int delay_val);
 
 private:
    void    Dump(char* text);
@@ -510,6 +598,7 @@ public:
 } // end namespace
 #endif
 
+using namespace libshift595arduino;
 //
 // END OF FILE
 //
